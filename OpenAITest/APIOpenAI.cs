@@ -4,7 +4,7 @@ namespace AspNetSignalIR.OpenAITest
 {
     public class APIOpenAI
     {
-        public static string Conectar(string texto)
+        public async static Task<string> Conectar(string texto)
         {
             var apiKey = Environment.GetEnvironmentVariable("OPEN_AI_KEY");
             var client = new OpenAIAPI(apiKey);
@@ -13,9 +13,8 @@ namespace AspNetSignalIR.OpenAITest
 
             chat.AppendSystemMessage($"Com resposta muito curta, responda: {texto}");
 
-            string conection = chat.GetResponseFromChatbotAsync().GetAwaiter().GetResult();
+            return await chat.GetResponseFromChatbotAsync();
 
-            return conection;
         }
     }
 }
