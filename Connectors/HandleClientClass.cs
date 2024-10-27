@@ -23,8 +23,9 @@ internal class HandleClientClass
                 {
                     // Handle client disconnection
                     Console.WriteLine($"Client {clientId.id} disconnected");
-                    _clients.Remove(clientId, out _);
+                    Client.RemoverCliente(clientId);
                     await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Connection closed", CancellationToken.None);
+                    _clients.Remove(clientId, out _);
                 }
                 else
                 {
@@ -39,7 +40,7 @@ internal class HandleClientClass
                         string send = $"Opção escolhida {receivedMessage}";
                         byte[] opcaoClient = Encoding.UTF8.GetBytes(send);
                         await webSocket.SendAsync(new ArraySegment<byte>(opcaoClient), WebSocketMessageType.Text, true, CancellationToken.None);
-
+                        continue;
                     }
 
                     if (receivedMessage == "back")
