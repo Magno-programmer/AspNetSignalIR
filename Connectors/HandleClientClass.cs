@@ -11,6 +11,7 @@ internal class HandleClientClass
     public static async Task HandleClientAsync(Client clientId, WebSocket webSocket, Dictionary<Client, WebSocket> _clients, int option)
     {
         byte[] buffer = new byte[1024];
+        byte[] bufferOption = new byte[256];
 
         try
         {
@@ -31,6 +32,16 @@ internal class HandleClientClass
                     string receivedMessage = Encoding.UTF8.GetString(buffer, 0, result.Count);
                     Console.WriteLine($"Received a mensage from client id: {clientId.id} name: {clientId.Nome}");
 
+                    if (receivedMessage.All(char.IsDigit))
+                    {
+                        option = int.Parse(receivedMessage);
+
+                        string send = $"Opção escolhida {receivedMessage}";
+                        byte[] opcaoClient = Encoding.UTF8.GetBytes(send);
+                        await webSocket.SendAsync(new ArraySegment<byte>(opcaoClient), WebSocketMessageType.Text, true, CancellationToken.None);
+
+                    }
+
                     if (receivedMessage == "back")
                     {
                         byte[] bufferTest = new byte[1024];
@@ -39,12 +50,13 @@ internal class HandleClientClass
                         byte[] responseMessageChat = Encoding.UTF8.GetBytes(resposta);
                         await webSocket.SendAsync(new ArraySegment<byte>(responseMessageChat), WebSocketMessageType.Text, true, CancellationToken.None);
 
-
+                      
                         var resultTest = await webSocket.ReceiveAsync(new ArraySegment<byte>(bufferTest), CancellationToken.None);
                         string receivedOption = Encoding.UTF8.GetString(bufferTest, 0, resultTest.Count);
                         Console.WriteLine($"Received a mensage from client id: {clientId.id} name: {clientId.Nome}");
 
                         option = int.Parse( receivedOption );
+                        continue;
                     }
 
                     switch (option)

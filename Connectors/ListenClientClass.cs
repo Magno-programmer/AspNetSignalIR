@@ -10,7 +10,6 @@ internal class ListenClientClass
     public static async Task ListenForClients(HttpContext context, Dictionary<Client, WebSocket> _clients)
     {
         byte[] buffer = new byte[256];
-        byte[] bufferTest = new byte[256];
 
         try
         {
@@ -26,19 +25,12 @@ internal class ListenClientClass
                 Client newCliente = new(receivedName); // Unique ID for each client
                 _clients.TryAdd(newCliente, webSocket);
 
-                //Get Id from client to client side
-                string id = $"{newCliente.id}";
-                byte[] idClient = Encoding.UTF8.GetBytes(id);
-
                 Console.WriteLine($"Client \nId: {newCliente.id} \nName: {newCliente.Nome} \nStatus: connected");
 
-                var option = await webSocket.ReceiveAsync(new ArraySegment<byte>(bufferTest), CancellationToken.None);
-
-                string received = Encoding.UTF8.GetString(bufferTest, 0, option.Count);
-                int receivedOption = int.Parse(received);
+                int option = 0;
 
                 // Handle communication with this client
-                await Task.Run(() => HandleClientClass.HandleClientAsync(newCliente, webSocket, _clients, receivedOption));
+                await Task.Run(() => HandleClientClass.HandleClientAsync(newCliente, webSocket, _clients, option));
             }
             else
             {
