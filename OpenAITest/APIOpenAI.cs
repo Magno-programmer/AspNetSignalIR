@@ -7,7 +7,15 @@ namespace AspNetSignalIR.OpenAITest
         public async static Task<string> Conectar(string texto)
         {
             var apiKey = Environment.GetEnvironmentVariable("OPEN_AI_KEY");
-            var client = new OpenAIAPI(apiKey);
+
+            if (string.IsNullOrEmpty(apiKey))
+            {
+                Console.WriteLine("apiKey does not exist");
+                return "API key not set.";
+            }
+
+            var apiAuth = new APIAuthentication(apiKey);
+            var client = new OpenAIAPI(apiAuth);
 
             var chat = client.Chat.CreateConversation();
 
