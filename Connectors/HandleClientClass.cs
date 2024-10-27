@@ -44,18 +44,6 @@ internal class HandleClientClass
 
                     if (receivedMessage == "back")
                     {
-                        byte[] bufferTest = new byte[1024];
-
-                        string resposta = $"Escolha uma nova opção: ";
-                        byte[] responseMessageChat = Encoding.UTF8.GetBytes(resposta);
-                        await webSocket.SendAsync(new ArraySegment<byte>(responseMessageChat), WebSocketMessageType.Text, true, CancellationToken.None);
-
-                      
-                        var resultTest = await webSocket.ReceiveAsync(new ArraySegment<byte>(bufferTest), CancellationToken.None);
-                        string receivedOption = Encoding.UTF8.GetString(bufferTest, 0, resultTest.Count);
-                        Console.WriteLine($"Received a mensage from client id: {clientId.id} name: {clientId.Nome}");
-
-                        option = int.Parse( receivedOption );
                         continue;
                     }
 
