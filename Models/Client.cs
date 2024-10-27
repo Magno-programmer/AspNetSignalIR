@@ -25,6 +25,5 @@ internal class Client
     {
         // Adiciona o ID do cliente removido para reutilização
         availableIds.Push(client.id);
-        Console.WriteLine("ids disponíveis {}" + availableIds.ToList());
     }
 }

@@ -22,7 +22,7 @@ internal class HandleClientClass
                 if (result.MessageType == WebSocketMessageType.Close)
                 {
                     // Handle client disconnection
-                    Console.WriteLine($"Client {clientId.id} disconnected");
+                    Console.WriteLine($"Client {clientId.id} : {clientId.Nome} disconnected");
                     Client.RemoverCliente(clientId);
                     await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Connection closed", CancellationToken.None);
                     _clients.Remove(clientId, out _);
@@ -35,9 +35,22 @@ internal class HandleClientClass
 
                     if (receivedMessage.All(char.IsDigit))
                     {
+                        string send;
                         option = int.Parse(receivedMessage);
 
-                        string send = $"Opção escolhida {receivedMessage}";
+                        if (option == 1)
+                        {
+                            send = $"Opção escolhida {receivedMessage}, você entrou no grupo";
+
+                        }
+                        else if (option == 2) 
+                        {
+                            send = $"Opção escolhida {receivedMessage}, você entrou no ChatBox";
+                        }
+                        else
+                        {
+                            send = $"Opção escolhida {receivedMessage}";
+                        }
                         byte[] opcaoClient = Encoding.UTF8.GetBytes(send);
                         await webSocket.SendAsync(new ArraySegment<byte>(opcaoClient), WebSocketMessageType.Text, true, CancellationToken.None);
                         continue;
