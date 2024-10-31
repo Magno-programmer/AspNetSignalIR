@@ -31,40 +31,19 @@ internal class HandleClientClass
                 {
                     // Broadcast message to all connected clients
                     string receivedMessage = Encoding.UTF8.GetString(buffer, 0, result.Count);
-                    Console.WriteLine($"Received a mensage from client id: {clientId.id} name: {clientId.Nome}");
 
                     if (receivedMessage.All(char.IsDigit))
                     {
-                        string send;
                         option = int.Parse(receivedMessage);
+                        Console.WriteLine($"\nReceived a option choose from: \nClient id: {clientId.id} \nName: {clientId.Nome} \nOption: {option}");
 
-                        if (option == 1)
-                        {
-                            send = $"Opção escolhida {receivedMessage}, você entrou no grupo";
-
-                        }
-                        else if (option == 2) 
-                        {
-                            send = $"Opção escolhida {receivedMessage}, você entrou no ChatBox";
-                        }
-                        else
-                        {
-                            send = $"Opção escolhida {receivedMessage}";
-                        }
-                        byte[] opcaoClient = Encoding.UTF8.GetBytes(send);
-                        await webSocket.SendAsync(new ArraySegment<byte>(opcaoClient), WebSocketMessageType.Text, true, CancellationToken.None);
                         continue;
                     }
-
-                    if (receivedMessage == "back")
-                    {
-                        continue;
-                    }
+                    Console.WriteLine($"\nReceived a message from: \nClient id: {clientId.id} \nName: {clientId.Nome}");
 
                     switch (option)
                     {
                         case 1:
-
                             string responseMessage = $"{clientId.Nome}: {receivedMessage}";
                             await BroadcastClass.BroadcastMessageAsync(responseMessage, clientId, _clients);
                             break;
